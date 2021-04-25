@@ -6,11 +6,18 @@ import {closePopout, goBack, openModal, openPopout, setPage} from '../../store/r
 import {
     Snackbar,
     Panel,
-    PanelHeader
+    PanelHeader,
+    Group,
+    Header,
+    PanelSpinner,
+    Placeholder,
+    Div
 } from "@vkontakte/vkui";
 
 import Icon16ErrorCircleFill from '@vkontakte/icons/dist/16/error_circle_fill';
 import Icon20CheckCircleFillGreen from '@vkontakte/icons/dist/20/check_circle_fill_green';
+
+var Data = '';
 
 class HomePanelBase extends React.Component {
 
@@ -19,9 +26,8 @@ class HomePanelBase extends React.Component {
 
         this.state = {
             snackbar: null,
-            number: '',
-            name: '',
-            text: ''
+            requests: [],
+            loader: true
         };
 
         this.showError = this.showError.bind(this);
@@ -61,6 +67,10 @@ class HomePanelBase extends React.Component {
         .then((data) => {
             data = JSON.parse(data);
             console.log(data);
+            this.setState({
+                requests: data,
+                loader: false
+            });
         });
     }
     render() {
@@ -68,8 +78,32 @@ class HomePanelBase extends React.Component {
 
         return (
             <Panel id={id}>
-                <PanelHeader>Список обращений</PanelHeader>
-                
+                <PanelHeader>Админ-панель</PanelHeader>
+                {this.state.loader ? <PanelSpinner/> : 
+                <Group header={<Header mode="primary">Обращения пользователей</Header>} description="Нажмите на обращение для более подробной информации">
+                    {this.state.requests.length === 0 ? <Placeholder header="Обращений нет"></Placeholder> : 
+                    <Div>
+                        <table border="1" cellSpacing="0" cellPadding="8px" style={{ backgroundColor: '#f5f5f5', width: '100%', textAlign: 'center' }}>
+                            <tbody>
+                                    <th>ID обращения</th>
+                                    <th>Дата создания</th>
+                                    <th>ФИО</th>
+                                    <th>Номер телефона</th>
+                                {this.state.requests.map((item) => 
+                                    <tr onClick={() => {
+                                        Data = item;
+                                        this.props.openModal("MODAL_PAGE_BOTS_LIST")
+                                    }}>
+                                        <td>{item.id}</td>
+                                        <td>{item.time}</td>
+                                        <td>{item.lastName + ' ' + item.firstName + ' ' + item.middleName}</td>
+                                        <td>{item.phone}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </Div> }
+                </Group>}
                 {this.state.snackbar}
             </Panel>
         );
@@ -86,3 +120,4 @@ const mapDispatchToProps = {
 };
 
 export default connect(null, mapDispatchToProps)(HomePanelBase);
+export var Data;

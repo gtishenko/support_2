@@ -25,3 +25,7 @@ a, div, img, p, button {
 .Panel__in {
     background-color: #EBEDE0;
 }
+
+table {
+    border: .5px solid rgba(0,0,0,0.08);
+}
