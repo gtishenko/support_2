@@ -84,7 +84,7 @@ class HomePanelBase extends React.Component {
                     {this.state.requests.length === 0 ? <Placeholder header="Обращений нет"></Placeholder> : 
                     <Div>
                         <div style={{ overflowY: 'auto' }}>
-                            <table border="1" cellSpacing="0" cellPadding="8px" style={{ backgroundColor: '#f5f5f5', width: '100%', textAlign: 'center' }}>
+                            <table border="1" cellSpacing="0" cellPadding="8px" style={{ backgroundColor: '#f5f5f5', width: '100%', textAlign: 'center', display: 'table' }}>
                                 <tbody>
                                         <th>ID обращения</th>
                                         <th>Дата создания</th>
